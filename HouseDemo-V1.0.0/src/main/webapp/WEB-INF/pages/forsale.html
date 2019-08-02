@@ -1,0 +1,432 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>For Sale</title>
+
+<!---css--->
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<!---css--->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords"
+	content="Real Space Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=601a628c5fc1ba80f78b685d1c5cd062"></script>
+<!---js--->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<!---fonts-->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="provence.json"></script>
+<script src="js/jquery.flexslider.js"></script>
+<script type="application/x-javascript">
+
+	 addEventListener("load", function() {
+		 setTimeout(hideURLbar, 0);  
+	 }, false); 
+	 function hideURLbar()
+	 {
+		 window.scrollTo(0,1); 
+	 } 
+</script>
+<link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=601a628c5fc1ba80f78b685d1c5cd062"></script>
+<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+<script>
+	//加载省市区
+	$(function() {
+		//获取当前所在城市
+		var city = $("#infocity").text();
+		//根据当前城市判断所在省
+		var provence = findWhichProvence(city);
+		//页面加载完显示付款类型
+		pricetype();
+		//页面加载完显示室
+		showRoom();
+		//页面加载完显示厅
+		showDoor();
+		//页面加载完显示最小价格
+		showMinprice();
+		//页面加载完显示最大价格
+		showMaxprice();
+		let length = 0;
+		let timer=null;
+		clearInterval(timer);//暂停时间
+		timer=setInterval(function(){
+			$("#progressbar").text("数据加载中："+length+"%");
+			document.getElementById("progressbar").style.width=length+"%";
+			length=length+10;
+			if(length>100){//资源记载完毕需要清除进度条	
+				//直接去掉style
+				$("#progress").empty();
+				$("#progress").removeClass("progress");				//去掉div的class
+				$("#progressbar").removeClass("progress-bar");
+				//加载分页页面 
+				$("#pageId").load("doPageUI",doLoadObjects(1));
+				clearInterval(timer);//暂停时间
+			}
+		},250);
+		
+	})
+	//根据当前城市判断所在省
+	function findWhichProvence(city){
+		for ( var i in provencejson) {  //遍历省
+			var cities = provencejson[i].cityList;  //获取当前省下面的市
+			for ( let k in cities){
+				if(city == cities[k].name){ //得到匹配的市，则将省获取到并传到加载省的标签中
+					var provence = provencejson[i].name;
+					//页面加载完显示省份	
+					myProvence(provence);
+					//页面加载完显示市
+					mycity();
+					//页面加载完显示区/县
+					myplace();
+				}
+			}
+			
+		}
+	}
+	//显示房源数据
+	function doLoadObjects(flag){ //利用Ajax请求数据
+		var url = "doFindPageObject";
+		var provence=$("#provences").val();  //省
+		var city=$("#city").val();  //市
+		var place=$("#places").val();  //县/区
+		var pricetype=$("#pricetype").val();//付款方式
+		var room=$("#room").val(); //室
+		var door=$("#door").val();//厅
+		if(room=='所有'){
+			room=0;
+		}
+		if(door=='所有'){
+			door=0;
+		}
+		var minprice=$("#minprice").val();//获取最小价格
+		var maxprice=$("#maxprice").val();//获取最大价格
+		//注意最小价格不能大于最大价格
+		if((minprice!="--"&&maxprice!="--")&&(minprice>maxprice)){
+			alert("选择的最小价格不能大于最大价格");
+			return;
+		}
+		var pageCurrent=$("#pageId").data("pageCurrent");//获取当前页码值
+		if(!pageCurrent||flag==0)pageCurrent=1;
+		var pageCurrent = pageCurrent;
+		var params={"provence":provence,"city":city,"place":place,"pricetype":pricetype,
+				"room":room,"door":door,"minprice":minprice,"maxprice":maxprice};
+		params.pageCurrent = pageCurrent;
+		//服务端结果响应到客户端以后会调用function(result){}函数
+		$.getJSON(url,params,function(result){
+			doHandleResponseResult(result);
+		});
+	}
+	//动态加载房源数据div
+	function doCreateDiv(j,records){
+		//获取home对象,并清空
+		var home=$("#home");
+		home.empty();	
+		var profiles=$("#profiles");
+		profiles.empty();
+		for(let i=0;i<j;i++){
+			let id = records[i].houseid; //获取房源id
+			var appendDiv ="<div class='forsale-grids'><div class='forsale1'><div class='forsale-left'>"
+				+"<img src='images/p3.jpg' class='img-responsive' alt='图片偷跑啦'></div>"
+				+"<div class='forsale-right'><h5><label>￥</label> "
+				+records[i].price+" - <span>"+records[i].pricetype+"付款</span>&emsp;&emsp;&emsp;&emsp;<span class='pinfangmi'>"+records[i].preprice+"元/㎡</span></h5>"
+				+"<p><span class='glyphicon glyphicon-map-marker'></span>"
+				+"<a onclick='loadMap(this)' >"+records[i].location+"</a> </br><span>"+records[i].housetype+"</span>"
+				+"&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span>收藏</span></p>"
+				+"<a href='detailInfo?"+id+"' class='button4'>了解详细信息</a></div>"
+				+"<div class='clearfix'></div><ul><li><span> "+records[i].size+" </span>平米</li>"
+				+"<li><span> "+records[i].room+" </span>室</li><li><span> "+records[i].door+" </span>厅</li>"
+				+"<li><span> "+records[i].toile+" </span>卫</li><li><span> "
+				+records[i].buildage+" </span>年建筑</li><li><span> "
+				+records[i].date+" </span>发布</li></ul></div></div><div id='maps' <div><p id='mapp1' style='display:none;'></p><p id='mapp2' style='display:none;'></p><div id='map' ></div></div></div>";	
+			$("#home").append(appendDiv);
+			var appendDiv2 ="<div class='col-md-4 forsale-grid1'>"
+				+"<img src='images/s4.jpg' class='img-responsive' alt='/'>"
+				+"<div class='sale-info'><span>卖房</span></div>"
+				+"<p><span class='glyphicon glyphicon-map-marker'></span>"
+				+"<a href='#' >"+records[i].location+"</a> </br>"
+				+"<p>小区："+records[i].housename+"&emsp;&emsp楼层："+records[i].floor+"楼</p>"
+				+"<p>"+records[i].size+"平方, "+records[i].room+"室"+records[i].door+"厅"+records[i].toile+"卫</p>"
+				+"<a href='detailInfo?"+id+"'>了解更多</a><h6>￥"+records[i].price+"</h6></div>";
+			$("#profiles").append(appendDiv2);
+		}
+	}
+	//加载地图
+	function loadMap(a){
+		var city = $("#city option:selected").text(); //获取所在市
+		var location = $(a).text(); //获取详细地址io
+		//应该是当前对象下面的mapdiv
+		$(a).parent().parent().parent().parent().next("div").children("#mapp1").text(city);
+		$(a).parent().parent().parent().parent().next("div").children("#mapp2").text(location);
+		$(a).parent().parent().parent().parent().next("div").children("#map").css("height","500px");
+		$(a).parent().parent().parent().parent().next("div").children("#map").load("poimap");//加载地图到id为map的div中
+	}
+	function doHandleResponseResult(result){
+		if(result.state==1){ 
+			//1.显示记录
+			let count = result.data.rowCount;//获取传过来的result中的总记录数
+			let records=result.data.records;
+			let pageSize = result.data.pageSize;//获取每页最多有多少条记录
+			let pageCurrent = result.data.pageCurrent;
+			let pageCount = result.data.pageCount;
+			var j=pageSize;//控制循环次数
+			if(count<pageSize){
+				j=count//如果查出来的记录数小与每页最多的显示数时，创建记录数个div
+			}
+			//获取最后一页的记录数   总记录数%每页显示最多记录数  最后一页加载的div的个数由最后一页的记录数
+			if(pageCurrent==pageCount&&(count%pageSize)!=0){//不等于0表示最后一页的记录数小于pageSize
+				j=count%pageSize;
+			}
+			doCreateDiv(j,records);//动态加载房源数据div
+			//2.显示分页信息
+			doSetPagination2(result);//此方法位于page.htlm中
+		}else{
+			//查询时若没找到用户需要的房源则清空数据区,并为用户推荐
+			$("#home").empty();
+			$("#home").text("没找到您需要的房源~~~下面是我们为您推荐的房源");
+			//$("#pageId").load("doPageUI");
+			//推荐房源
+			$("#pageId").load("doPageUI",recommend());
+		}
+	}
+	function recommend(){
+		var url = "doFindRecommend";
+		var provence=$("#provences").val();  //省
+		var city=$("#city").val();  //市
+		var place=$("#places").val();  //县/区
+		var pageCurrent=$("#pageId").data("pageCurrent");//获取当前页码值
+		if(!pageCurrent)pageCurrent=1;
+		var pageCurrent = pageCurrent;
+		var params={"provence":provence,"city":city,"place":place};
+		params.pageCurrent = pageCurrent;
+		
+		//服务端结果响应到客户端以后会调用function(result){}函数
+		$.getJSON(url,params,function(result){
+			doHandleResponseResult(result);
+			console.log(result);
+		});
+	}
+	//显示付款类型
+	function pricetype(){
+		$("#pricetype").append("<option value='皆可'>皆可</option>");
+		$("#pricetype").append("<option value='一次性'>一次性</option>");
+		$("#pricetype").append("<option value='分期'>分期</option>");
+	}
+	//加载完显示室
+	function showRoom(){
+		$("#room").append("<option value='所有'>所有</option>");
+		$("#room").append("<option value='1'>1</option>");
+		$("#room").append("<option value='2'>2</option>");
+		$("#room").append("<option value='3'>3</option>");
+	}
+	//显示厅
+	function showDoor(){
+		$("#door").append("<option value='所有'>所有</option>");
+		$("#door").append("<option value='1'>1</option>");
+		$("#door").append("<option value='2'>2</option>");
+		$("#door").append("<option value='3'>3</option>");
+	}
+	//显示最小价格
+	function showMinprice(){
+		$("#minprice").append("<option value='--'>--</option>");
+		$("#minprice").append("<option value='2000'>2000</option>");
+		$("#minprice").append("<option value='3000'>3000</option>");
+		$("#minprice").append("<option value='4000'>4000</option>");
+		$("#minprice").append("<option value='5000'>5000</option>");
+		$("#minprice").append("<option value='6000'>6000</option>");
+		$("#minprice").append("<option value='7000'>7000</option>");
+		$("#minprice").append("<option value='8000'>8000</option>");
+		$("#minprice").append("<option value='9000'>9000</option>");
+		$("#minprice").append("<option value='10000'>10000</option>");
+	}
+	//显示最大价格
+	function showMaxprice(){
+		$("#maxprice").append("<option value='--'>--</option>");
+		$("#maxprice").append("<option value='2000'>2000</option>");
+		$("#maxprice").append("<option value='3000'>3000</option>");
+		$("#maxprice").append("<option value='4000'>4000</option>");
+		$("#maxprice").append("<option value='5000'>5000</option>");
+		$("#maxprice").append("<option value='6000'>6000</option>");
+		$("#maxprice").append("<option value='6000'>7000</option>");
+		$("#maxprice").append("<option value='8000'>8000</option>");
+		$("#maxprice").append("<option value='9000'>9000</option>");
+		$("#maxprice").append("<option value='10000'>10000</option>");
+	}
+	
+	// 显示省份
+	function myProvence(provence) {
+		for ( var i in provencejson) {
+			if(provencejson[i].name == provence){//匹配到省，设置selected属性
+				$("#provences").append(
+						"<option selected='selected' value='"+provencejson[i].name+"'>"+ provencejson[i].name + "</option>");
+			}else{
+				$("#provences").append(
+						"<option value='"+provencejson[i].name+"'>"+ provencejson[i].name + "</option>");
+			}
+			
+		}
+	}
+	//显示市区
+	function mycity() {
+		//先清空当前数据
+		$("#city").empty();
+		//获取当前省份
+		let provence = $("#provences").val();
+		let cities;
+		//获取省份中的市数组
+		for ( let j in provencejson) {
+			if (provencejson[j].name == provence) {
+				cities = provencejson[j].cityList;
+			}
+		}
+		//根据当前省份显示下面的市区	
+		for ( let k in cities) {
+			$("#city").append(
+					"<option value='"+cities[k].name+"'>" + cities[k].name
+							+ "</option>");
+		}
+	}
+	//显示县/区
+	function myplace() {
+		//先清空当前数据
+		$("#places").empty();
+		//获取当前省份中的市数组
+		//获取当前市
+		let city = $("#city").val();
+		let provence = $("#provences").val();
+		let places;
+		let cities;
+		//获取省份中的市数组
+		for ( let j in provencejson) {
+			if (provencejson[j].name == provence) {
+				cities = provencejson[j].cityList;
+			}
+		}
+		for ( let k in cities) {
+			if (cities[k].name == city) {
+				places = cities[k].areaList;
+			}
+		}
+		//在市数组中获取当前的市显示下面的区/县
+		for ( let m in places) {
+			$("#places").append(
+					"<option value='"+places[m].name+"'>" + places[m].name + "</option>");
+		}
+	}
+</script>
+<!-- //FlexSlider-->
+</head>
+<body>
+	<!---header--->
+	<!---banner--->
+	<div class="banner-section">
+		<div class="container">
+			<h2>卖 房</h2>
+		</div>
+	</div>
+	<!---banner--->
+	<div class="content">
+		<div class="properties-section">
+			<div class="container">
+				<div class="properties-grids">
+					<div class="col-md-9 forsales-left">
+						<div class="forsale">
+							<div class="bs-example bs-example-tabs" role="tabpanel"
+								data-example-id="togglable-tabs" id="houseInfo">
+								<ul id="myTab" class="nav nav-tabs left-tab" role="tablist">
+									<li role="presentation" class="active"><a href="#home"
+										id="home-tab" role="tab" data-toggle="tab"
+										aria-controls="home" aria-expanded="true"><img
+											src="images/menu1.png"></a></li>
+									<li role="presentation"><a href="#profile" role="tab"
+										id="profile-tab" data-toggle="tab" aria-controls="profile"><img
+											src="images/menu.png"></a></li>
+								</ul>
+								<!-- 进度条 -->
+								<div class="progress" id="progress">
+									<div id="progressbar" class="progress-bar" role="progressbar"
+										aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+									</div>
+								</div>
+								<div id="myTabContent" class="tab-content">
+									<div role="tabpanel" class="tab-pane fade in active" id="home"
+										aria-labelledby="home-tab">
+										<!-- 此处循环动态 -->
+									</div>
+									<div role="tabpanel" class="tab-pane fade" id="profile"
+										aria-labelledby="profile-tab" >
+										<div class="forsale-grids1" id = "profiles" >
+											<!-- 此处循环动态 -->
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 properties-right">
+						<!-- 找我所需 -->
+						<div class="properties-top">
+							<h4>找我所需</h4>
+							<div class="yourplace" onchange="mycity(),myplace()">
+								<h5>您所在省份</h5>
+								<select class="sel2" id="provences" name="provences"></select>
+							</div>
+							<div class="yourplace" onchange="myplace()">
+								<h5>您所在城市</h5>
+								<select class="sel2" id="city" name="city"></select>
+							</div>
+							<div class="yourplace">
+								<h5>您所在区/县</h5>
+								<select class="sel2" id="places" name="places"></select>
+							</div>
+							<div class="yourplace">
+								<h5>付款类型</h5>
+								<select class="sel2" id="pricetype" name="pricetype"></select>
+							</div>
+							<div class="yourplace-grids">
+								<div class="col-md-6 yourplace-grid">
+									<h5>几室</h5>
+									<select class="sel3" id="room" name="room">
+									</select>
+								</div>
+								<div class="col-md-6 yourplace-grid">
+									<h5>几厅</h5>
+									<select class="sel3" id="door" name="door">
+									</select>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="yourplace-grids1">
+								<div class="col-md-6 yourplace-grid">
+									<h5>最小价格/㎡</h5>
+									<select class="sel4" id="minprice" name="minprice">
+									</select>
+								</div>
+								<div class="col-md-6 yourplace-grid">
+									<h5>最大价格/㎡</h5>
+									<select class="sel4" id="maxprice" name="maxprice">
+									</select>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="search1">
+								<input type="button" value="查找" class="btn btn-primary"
+									style="margin-top: 10px" onclick="doLoadObjects(0)">
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<!-- 分页 -->
+			<div id="pageId" class="test-center"></div>
+		</div>
+	</div>
+</body>
+</html>

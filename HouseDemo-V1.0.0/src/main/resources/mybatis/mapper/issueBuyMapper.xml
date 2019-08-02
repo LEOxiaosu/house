@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hoursecy.sy.dao.IssueBuyMapper">
+	<insert id="addbuyhouse">
+		<!--  insert into renthouse
+		values(#{provence},#{provence},#{city},
+		#{place},#{room},#{door},
+		#{toile},#{size},#{price},#{waterelet},#{intro},#{location},
+		#{pricetype})-->
+		insert into sellhouse values(2,null,#{provence},#{city},#{place},#{room},#{door},#{toile},#{housetime},#{buildage},#{housetype},#{intro},#{size},#{price},#{preprice},#{pricetype},#{location},#{housename},#{floor},#{issuetime})
+	<!-- insert into renthouse values(null,null,'四川省','成都市','武侯区',1,1,1,'近地铁',20,451,'押一付一','sdf',1,1,'1997-12-7','asdf') -->
+	</insert>
+
+</mapper>

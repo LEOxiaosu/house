@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hoursecy.sy.dao.InfoDao">
+    
+    <sql id="queryWhereId">
+       from sellhouse
+       <where>
+           <if test="id!=null and id!=''">
+             id like concat("%",#{id},"%")
+           </if>
+       </where>
+    </sql>
+    <!-- 系统底层解析此元素时,会将元素信息封装到一个
+    MappedStatement对象中 -->
+    <select id="findPageObjects"
+            resultType="com.hoursecy.sy.pojo.ForSellPojo">
+           select *
+           <include refid="queryWhereId"/>
+           order by id desc
+           limit #{startIndex},#{pageSize}
+    </select>
+   <!-- 统计记录总数 -->
+    <select id="getRows" resultType="int">
+          select count(*)
+          <include refid="queryWhereId"/>
+    </select>
+    <delete id="deleteObjects"  parameterType="int">
+        delete from sellhouse
+        where houseid=#{houseid}
+    </delete>
+ 	 <select id="doFindObjectById"
+            resultType="com.hoursecy.sy.pojo.ForSellPojo">
+           select * from sellhouse where houseid=#{houseid}
+    </select>
+    <update id="alterData">
+    	update sellhouse set provence=#{provence},city=#{city},place=#{place},room=#{room},door=#{door},toile=#{toile},housetime=#{housetime},buildage=#{buildage},housetype=#{housetype},intro=#{intro},size=#{size},price=#{price},preprice=#{preprice},pricetype=#{pricetype},location=#{location} where houseid=#{houseid}
+    </update>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hoursecy.sy.dao.ForRentMapper">
+	<!-- 查询满足条件的记录数 -->
+	<select id="getRowCount" resultType="int">
+		select count(*)
+		<include refid="findObjects" />
+	</select>
+
+	<!-- 查询满足条件的记录 -->
+	<select id="findRentObjects" resultType="com.hoursecy.sy.pojo.ForRentPojo">
+		select *
+		<include refid="findObjects" />
+		limit #{startIndex},#{pageSize}
+	</select>
+
+	<sql id="findObjects">
+		from renthouse
+		<where>
+			provence = #{provence} and city = #{city} and place = #{place}
+			<if test="room!=0 ">
+				and room =#{room}
+			</if>
+			<if test="door!=0">
+				and door = #{door}
+			</if>
+			<if test="minprice!='--' and maxprice=='--' ">
+				and preprice >= #{minprice}
+			</if>
+			<if test="minprice=='--' and maxprice!='--' ">
+				and preprice  <![CDATA[<=]]>
+				#{maxprice}
+			</if>
+			<if test="minprice!='--' and maxprice!='--' ">
+				and (preprice between #{minprice} and #{maxprice})
+			</if>
+		</where>
+	</sql>
+
+</mapper>

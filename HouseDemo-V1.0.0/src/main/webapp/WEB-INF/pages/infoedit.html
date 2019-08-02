@@ -1,0 +1,86 @@
+﻿<!doctype html>
+<html>
+<head>
+<body>
+	<script type="text/javascript">
+	$(function(){
+		var data = $(".box").data("data");
+		window.houseid=data.houseid;
+			$("#provence").val(data.provence);
+			$("#city").val(data.city);
+			$("#place").val(data.place);
+			$("#room").val(data.room);
+			$("#door").val(data.door);
+			$("#toile").val(data.toile);
+			$("#housetime").val(data.housetime);
+			$("#buildage").val(data.buildage);
+			$("#housetype").val(data.housetype);
+			$("#intro").val(data.intro);
+			$("#size").val(data.size);
+			$("#price").val(data.price);
+			$("#preprice").val(data.preprice);
+			$("#pricetype").val(data.pricetype);
+			$("#location").val(data.location);
+			$(".btn-refer").on("click",insert);
+	})
+	function insert(){
+		//var data = document.getElementsById("#insert").innerHTML;
+		//console.log(data);
+		var url="alterData";
+		var provence =$("#provence").val();
+		var city =$("#city").val();
+		var place =$("#place").val();
+		var room =$("#room").val();
+		var door =$("#door").val();
+		var toile =$("#toile").val();
+		var housetime =$("#housetime").val();
+		var buildage =$("#buildage").val();
+		var housetype =$("#housetype").val();
+		var intro =$("#intro").val();
+		var size =$("#size").val();
+		var price =$("#price").val();
+		var preprice =$("#preprice").val();
+		var pricetype =$("#pricetype").val();
+		var location =$("#location").val();
+		var param = {"houseid":houseid,"provence":provence,"city":city,"place":place,"room":room,"door":door,"toile":toile,"housetime":housetime,"buildage":buildage,"housetype":housetype,"intro":intro,"size":size,"price":price,"preprice":preprice,"pricetype":pricetype,"location":location};
+		$.getJSON(url,param,function(result){
+			if(result.state==1){
+				alert(result.message);
+				
+			}
+		});
+	}
+	</script>
+	<div id="insert">
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">省份:</label><input id="provence" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">市区:</label><input id="city" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">城市:</label><input id="place" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">户型:</label><input id="room" rows="1" cols="3"></input><input id="door" rows="1" cols="3"></input><input id="toile" rows="1" cols="3"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">房子年限:</label><input id="housetime" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">建筑时间:</label><input id="buildage" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">房型:</label><input id="housetype" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">大小:</label><input id="size" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">总价:</label><input id="price" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">?元/米:</label><input id="preprice" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">支付类型:</label><input id="pricetype" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">具体位置:</label><input id="location" rows="1" cols="30"></input></div>
+	<div style="margin-left: 400px">
+	<label for="noteId" class="col-sm-2 control-label">环境:</label><textarea id="intro" rows="3" cols="30"></textarea></div>
+	<button type='button' class='btn-refer' style="margin-left: 650px">提交</button><button type='button' class='btn-refer'><a href="contact">返回</a></button></div>
+	
+	
+</body>
+
+</html>

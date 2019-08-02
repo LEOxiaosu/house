@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <style type="text/css">
+        #panel {
+            position: absolute;
+            background-color: white;
+            max-height: 50%;
+            overflow-y: auto;
+            top: 10px;
+            right: 10px;
+            width: 280px;
+        }
+    </style>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=601a628c5fc1ba80f78b685d1c5cd062"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+	<div id="citys">北京</div>
+	<div id="loca">天安门</div>
+	<!--  -->
+	<div id="container"></div>
+	<div id="panel"></div>
+	<div id="error"></div>
+<script type="text/javascript">
+    var map = new AMap.Map("map", {
+        resizeEnable: true
+    });
+    AMap.service(["AMap.PlaceSearch"], function() {
+        $("#citys").text(city);
+        $("#loca").text(location);  
+        var citys = $("#citys").text( $("#mapp1").text());
+        var loca = $("#loca").text($("#mapp2").text());
+        var citys = $("#citys").text();
+        var loca = $("#loca").text();
+        //构造地点查询类
+        var placeSearch = new AMap.PlaceSearch({ 
+            pageSize: 5, // 单页显示结果条数
+            pageIndex: 1, // 页码
+            city: citys, // 兴趣点城市
+            citylimit: true,  //是否强制限制在设置的城市内搜索
+            map: map, // 展现结果的地图实例
+             // 结果列表将在此容器中进行展示
+            autoFitView: true // 是否自动调整地图视野使绘制的 Marker点都处于视口的可见范围
+        });
+        //关键字查询
+        placeSearch.search(loca,function(status,result){
+            if(status=="error"){ //错误
+            	alert("error");
+            }else if(status=="no_data"){  //没数据
+                alert("no_data");
+            }else if(status=="complete"){  //成功
+                console.log(result.poiList); //打印值
+            }
+        });
+    });
+</script>
+</body>
+</html>

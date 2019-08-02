@@ -1,0 +1,915 @@
+﻿<!doctype html>
+<html>
+<head>
+<link rel="shortcut icon" href="#" />
+<!---css--->
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<!---css--->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords"
+	content="Real Space Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<script type="application/x-javascript">
+	
+	 addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } 
+</script>
+<!---js--->
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<link
+	href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'
+	rel='stylesheet' type='text/css'>
+<link
+	href='https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic'
+	rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Righteous'
+	rel='stylesheet' type='text/css'>
+	<script src="js/responsiveslides.min.js"></script>
+<script type="text/javascript" src="provence.json"></script>
+<script>
+/*------刘振鹏  登陆-------*/
+function LoginPhone() {
+	
+	var phone = $("#loginphone").val();
+	$.get("LoginPhone", {
+		"phone" : phone
+	}, function(result) {
+		if (result.result == "false") {
+			$("#loginphone").val("");
+			$("#loginphone_div").text("该手机号码未注册");
+		} else {
+			$("#loginphone_div").text("");
+		}
+	});
+}
+
+
+
+
+$(function() {
+	//记住密码
+	$("#brand").click(function() {
+		alert("确认记住密码吗?")
+		
+		
+	});
+	//登录	
+	$("#longin").click(function(){
+		var phone = $("#loginphone").val();
+		var password = $("#loginpassword").val();
+		$.post("Login", {
+			"phone" : phone,
+			"password" : password
+		}, function(result) {
+			usermessage = result;
+			if (result.id==null) {
+				alert("用户名或密码不正确!!");
+			} 
+			 else{
+				 alert("登录成功");
+				 console.log(result);"C:/Users/86176/Documents/Tencent Files/604356026/FileRecv/iplocation.html"
+				var tBody = $("#denglu")
+				tBody.empty();
+				$("#span").toggle();
+				$("#span").text("用户: "+result.nikename);
+				
+			 }
+		})
+		});
+})
+
+/*-------刘振鹏   登陆结束---------------*/
+
+/*--------刘振鹏---  注册-----------*/
+//身份证
+function IdCard() {
+	var idcard = $("#idcard").val();
+	$.get("iDcard", {
+		"idcard" : idcard,
+	}, function(result) {
+		if (result == "false") {
+			$("#idcard").val("");
+			$("#idcard_div").text("该身份证号码已被注册或不合法");
+		}else{
+			$("#idcard_div").text("");
+		}
+
+	});
+}
+
+function PasswordFormat2() {
+	var password1 = $("#password1").val();
+	var password = $("#password").val();
+	$.get("PasswordFormat2", {
+		"password1" : password1,
+		"password" : password
+	}, function(result) {
+		if (result == "false") {
+			$("#password").val("");
+			$("#password_div2").text("两次输入的密码不一致");
+		} else if (result == "true") {
+			$("#password_div2").text("");
+		}
+
+	});
+}
+
+//第一次密码校验
+function PasswordFormat1() {
+	var password1 = $("#password1").val();
+	$.get("PasswordFormat1", {
+		"password1" : password1
+	}, function(result) {
+		if (result == "0") {
+			$("#password_div1").text("请输入密码");
+		} else if (result == "1") {
+			$("#password1").val("");
+			$("#password_div1").text("密码长度小于6");
+		} else if (result == "2") {
+			$("#password1").val("");
+			$("#password_div1").text("密码长度大于16");
+		} else if (result == "3") {
+			$("#password_div1").text("密码安全级别(弱)");
+		} else if (result == "4") {
+			$("#password_div1").text("密码安全级别(中)");
+		} else if (result == "5") {
+			$("#password_div1").text("密码安全级别(强)");
+		}
+
+		$("#password_div1").html(result.message);
+	});
+}
+
+function PhoneFormat() {
+	//1.获取用户输入的手机号
+	var phone = $("#phone").val();
+	//手机号检验
+	$.get("PhoneFormat", {
+		"phone" : phone
+	}, function(result) {
+		if (result == "false") {
+			$("#phone").val("");
+			$("#phone_div").text("手机不合法或已存在");
+
+		} else if (result == "true") {
+			$("#phone_div").text("");
+		} else {
+			$("#phone_div").text("系统错误");
+		}
+	});
+}
+
+/*检验昵称是否存在*/
+function NikenameFormat() {
+	var nikename = $("#nikename").val();
+	$.get("NikenameFormat", {
+		"nikename" : nikename
+	}, function(result) {
+		if (result == "false") {
+			$("#nikename").val("");
+			$("#nikename_div").text("姓名不能为空");
+		} else if (result == "true") {
+			$("#nikename_div").text("");
+		} else {
+			$("#nikename_div").text("");
+			$("#nikename_div").text("系统错误");
+		}
+	});
+}
+/*---------刘振鹏-  注册  结束-------------*/
+
+$(function() {
+	$("#slider").responsiveSlides({
+		auto : true,
+		nav : false,
+		speed : 500,
+		namespace : "callbacks",
+		pager : true,
+	});
+});
+//买房,跳转到买房界面
+function byHouse() {
+	const url = "forsell";
+	//$("#mainContentId").load(url);  
+	$.get(url);
+}
+</script>
+<link href="css/owl.carousel.css" rel="stylesheet">
+<script src="js/owl.carousel.js"></script>
+<script>
+	$(document).ready(function() {
+		$("#owl-demo").owlCarousel({
+			items : 1,
+			lazyLoad : true,
+			autoPlay : true,
+			navigation : false,
+			navigationText : false,
+			pagination : true,
+		});
+	});
+	//点击买房局部刷新界面
+	function buyhouse() {
+		const url = "forsale";
+		//load函数为一个jquery中的一步加载函数,基于url异步加载资源并添加到指定位置
+		$(".chageContainer").load(url);
+	}
+	//点击租房局部刷星界面
+	function renthouse() {
+		const url = "forRent";
+		//load函数为一个jquery中的一步加载函数,基于url异步加载资源并添加到指定位置
+		$(".chageContainer").load(url);
+	}
+</script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>房地产大亨买房租房任您选</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/> 
+    <style type="text/css">
+       html,body,#container{
+           height:40%;
+       }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.15&key=601a628c5fc1ba80f78b685d1c5cd062&plugin=AMap.CitySearch"></script>
+<script type="text/javascript">
+    //利用高德地图获取用户所在城市信息
+    function showCityInfo() {
+        //实例化城市查询类
+        var citysearch = new AMap.CitySearch();
+        //自动获取用户IP，返回当前城市
+        citysearch.getLocalCity(function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                if (result && result.city && result.bounds) {
+                    var cityinfo = result.city;
+                    document.getElementById('infocity').innerHTML = cityinfo;
+                }
+            } else {//没获取到则默认显示位北京市
+            	document.getElementById('infocity').innerHTML = "北京市";
+            }
+        });
+    }
+    showCityInfo();
+</script>
+
+	<!---header--->
+	<div class="header-section">
+		<div class="container">
+			<div class="head-top">
+				<div class="social-icon">
+					<a href="#"><i class="icon"></i></a> <a href="#"><i
+						class="icon1"></i></a> <a href="#"><i class="icon2"></i></a> <a
+						href="#"><i class="icon3"></i></a> <a href="#"><i
+						class="icon4"></i></a>
+				</div>
+				<div class="email">
+					<li><div style='color: #F00; font-size: 30px; display: none';
+							id="span"></div></li>
+					<ul id="denglu">
+						<li><i class="glyphicon glyphicon-log-in" aria-hidden="true"></i><a
+							href="#" data-toggle="modal" data-target="#myModal">登录</a></li>
+						<li><i class="glyphicon glyphicon-lock" aria-hidden="true"></i><a
+							href="#" data-toggle="modal" data-target="#myModal1">注册</a></li>
+					</ul>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<nav class="navbar navbar-default">
+				<!---Brand and toggle get grouped for better mobile display--->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+						aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<div class="navbar-brand">
+						<h1>
+							<a href="index.html"><span>大亨房产 </span></a>
+						</h1>
+					</div>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="/HouseDemo-V1.0.0/">首页 <span
+								class="sr-only">(current)</span></a></li>
+						<li><a onclick="buyhouse()">买房</a></li>
+						<li><a onclick="renthouse()">租房</a></li>
+						<li><a href="issueBuy">卖房</a></li>
+						<li><a href="issueRent">出租</a></li>
+						<li><a href="contact.html">我的信息</a></li>
+					</ul>
+					<div style="color: #fff">
+					<img alt="" src="images/loc.png">
+						<span id='infocity'></span>
+					</div>
+				</div>
+				
+			</nav>
+		</div>
+	</div>
+	<!---header--->
+	<!---banner--->
+	<div class="chageContainer">
+		<div class="slider">
+			<div class="callbacks_container">
+				<ul class="rslides" id="slider">
+					<div class="slid banner1">
+						<div class="caption">
+							<h3>1400 Anastasia Avenue</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+								Donec nec pellentesque ex. Morbi iaculis mi in varius auctor.
+								Nullam feugiat erat .</p>
+							<a href="#" class="button">know more</a>
+						</div>
+					</div>
+					<div class="slid banner2">
+						<div class="caption">
+							<h3>Oakland, NJ94605</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+								Donec nec pellentesque ex. Morbi iaculis mi in varius auctor.
+								Nullam feugiat erat .</p>
+							<a href="#" class="button">know more</a>
+						</div>
+					</div>
+					<div class="slid banner3">
+						<div class="caption">
+							<h3>Florida 5, Pinecrest, FL</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+								Donec nec pellentesque ex. Morbi iaculis mi in varius auctor.
+								Nullam feugiat erat .</p>
+							<a href="#" class="button">know more</a>
+						</div>
+					</div>
+				</ul>
+			</div>
+		</div>
+		<div class="copyrights">
+			Collect from <a href="http://www.cssmoban.com/">网页模板</a>
+		</div>
+		<!---banner--->
+
+		<div class="friend-agent">
+			<div class="container">
+				<div class="friend-grids">
+					<div class="col-md-4 friend-grid">
+						<img src="images/p.png">
+						<h4>Search From Anywhere</h4>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+							Nulla convallis egestas rhoncus. Donec facilisis fermentum sem,
+							ac viverra ante luctus vel.</p>
+					</div>
+					<div class="col-md-4 friend-grid" onclick="buyhouse()">
+						<!-- <a href="forsale"><img src="images/p1.png"></a> -->
+						<img src="images/p1.png">
+						<h4>我要买房</h4>
+						<p>您还在商量什么呢，这么多房源等着你，房子不等人，精装房、清水房、二手房样样齐全。您可以和房东直接商量，走过路过千万不要错过。</p>
+					</div>
+					<div class="col-md-4 friend-grid">
+						<img src="images/p2.png">
+						<h4>找租房</h4>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+							Nulla convallis egestas rhoncus. Donec facilisis fermentum sem,
+							ac viverra ante luctus vel.</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+		<div class="offering">
+			<div class="container">
+				<h3>We are Offering the Best Real Estate Deals</h3>
+				<div class="offer-grids">
+					<div class="col-md-6 offer-grid">
+						<div class="offer-grid1">
+							<h4>
+								<a href="single.html">Villa In Hialeah, Dade County</a>
+							</h4>
+							<div class="offer1">
+								<div class="offer-left">
+									<a href="single.html" class="mask"><img src="images/p3.jpg"
+										class="img-responsive zoom-img" alt="" /></a>
+								</div>
+								<div class="offer-right">
+									<h5>
+										<label>$</label> 7,500 Per Month - <span>Single Family
+											Home</span>
+									</h5>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
+										elit, sed diam nonummy nibh…</p>
+									<a href="single.html" class="button1">more details</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 offer-grid">
+						<div class="offer-grid1">
+							<h4>
+								<a href="single.html">401 Biscayne Boulevard, Miami</a>
+							</h4>
+							<div class="offer1">
+								<div class="offer-left">
+									<a href="single.html" class="mask"><img src="images/p4.jpg"
+										class="img-responsive zoom-img" alt="" /></a>
+								</div>
+								<div class="offer-right">
+									<h5>
+										<label>$</label> 3,250 Per Month - <span>Condominium</span>
+									</h5>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
+										elit, sed diam nonummy nibh…</p>
+									<a href="single.html" class="button1">more details</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="offer-grids">
+					<div class="col-md-6 offer-grid">
+						<div class="offer-grid1">
+							<h4>
+								<a href="single.html">3895 NW 107th Ave</a>
+							</h4>
+							<div class="offer1">
+								<div class="offer-left">
+									<a href="single.html" class="mask"><img src="images/p5.jpg"
+										class="img-responsive zoom-img" alt="" /></a>
+								</div>
+								<div class="offer-right">
+									<h5>
+										<label>$</label> 5,200 Per Month - <span>Office</span>
+									</h5>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
+										elit, sed diam nonummy nibh…</p>
+									<a href="single.html" class="button1">more details</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 offer-grid">
+						<div class="offer-grid1">
+							<h4>
+								<a href="single.html">1400 Anastasia Avenue, Coral</a>
+							</h4>
+							<div class="offer1">
+								<div class="offer-left">
+									<a href="single.html" class="mask"><img src="images/p6.jpg"
+										class="img-responsive zoom-img" alt="" /></a>
+								</div>
+								<div class="offer-right">
+									<h5>
+										<label>$</label> 525,000 - <span>Villa</span>
+									</h5>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
+										elit, sed diam nonummy nibh…</p>
+									<a href="single.html" class="button1">more details</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="offer-grids">
+					<div class="col-md-6 offer-grid">
+						<div class="offer-grid1">
+							<h4>
+								<a href="#">12 Apartments Of Type A</a>
+							</h4>
+							<div class="offer1">
+								<div class="offer-left">
+									<a href="single.html" class="mask"><img src="images/p7.jpg"
+										class="img-responsive zoom-img" alt="" /></a>
+								</div>
+								<div class="offer-right">
+									<h5>
+										<label>$</label> 3,200 Per Month - <span>Apartment</span>
+									</h5>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
+										elit, sed diam nonummy nibh…</p>
+									<a href="single.html" class="button1">more details</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 offer-grid">
+						<div class="offer-grid1">
+							<h4>
+								<a href="single.html">20 Apartments Of Type B</a>
+							</h4>
+							<div class="offer1">
+								<div class="offer-left">
+									<a href="single.html" class="mask"><img src="images/p8.jpg"
+										class="img-responsive zoom-img" alt="" /></a>
+								</div>
+								<div class="offer-right">
+									<h5>
+										<label>$</label> 4,200 Per Month - <span>Apartment</span>
+									</h5>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing
+										elit, sed diam nonummy nibh…</p>
+									<a href="single.html" class="button1">more details</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+		<!---Featured Properties--->
+		<div class="feature-section">
+			<div class="container">
+				<h3>Featured Properties</h3>
+				<div class="feature-grids">
+					<div class="col-md-3 feature-grid">
+						<img src="images/f1.jpg" class="img-responsive" alt="/">
+						<h5>Villa in Hialeah, Dade</h5>
+						<p>
+							Lorem ipsum dolor sit amet, consectetuer elit,… <a href="#">Know
+								More</a>
+						</p>
+						<span>$2,500 Per Month</span>
+					</div>
+					<div class="col-md-3 feature-grid">
+						<img src="images/f2.jpg" class="img-responsive" alt="/">
+						<h5>401 Biscayne Boulevard</h5>
+						<p>
+							Lorem ipsum dolor sit amet, consectetuer elit,… <a href="#">Know
+								More</a>
+						</p>
+						<span>$7,500 Per Month</span>
+					</div>
+					<div class="col-md-3 feature-grid">
+						<img src="images/f3.jpg" class="img-responsive" alt="/">
+						<h5>154 Southwest Terra</h5>
+						<p>
+							Lorem ipsum dolor sit amet, consectetuer elit,… <a href="#">Know
+								More</a>
+						</p>
+						<span>$9,500 Per Month</span>
+					</div>
+					<div class="col-md-3 feature-grid">
+						<img src="images/f4.jpg" class="img-responsive" alt="/">
+						<h5>Florida 5, Pinecrest, FL</h5>
+						<p>
+							Lorem ipsum dolor sit amet, consectetuer elit,… <a href="#">Know
+								More</a>
+						</p>
+						<span>$5,500 Per Month</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+		<!---Featured Properties--->
+		<div class="membership">
+			<div class="container">
+				<h3>Membership Plans</h3>
+				<div class="membership-grids">
+					<div class="col-md-4 membership-grid">
+						<h4>Personal</h4>
+						<div class="membership1">
+							<h5>
+								9.99 <span>USD</span>
+							</h5>
+							<h6>/ 1 month</h6>
+							<ul class="member">
+								<li>10 Listings</li>
+								<li>2 Featured Listings</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-4 membership-grid">
+						<h4>Professional</h4>
+						<div class="membership1">
+							<h5>
+								49.99 <span>USD</span>
+							</h5>
+							<h6>/ 6 month</h6>
+							<ul class="member">
+								<li>40 Listings</li>
+								<li>10 Featured Listings</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-4 membership-grid">
+						<h4>Bussiness</h4>
+						<div class="membership1">
+							<h5>
+								99.99 <span>USD</span>
+							</h5>
+							<h6>/ 1 year</h6>
+							<ul class="member">
+								<li>Unlimited Listings</li>
+								<li>20 Featured Listings</li>
+							</ul>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+		<!---testimonials--->
+		<div class="testimonials">
+			<div class="container">
+				<h3>testimonial</h3>
+				<span></span>
+				<div id="owl-demo" class="owl-carousel">
+					<div class="item">
+						<div class="col-md-2 testmonial-img">
+							<img src="images/t1.png" class="img-responsive" alt="" />
+						</div>
+						<div class="col-md-10 testmonial-text">
+							<p>Lorem ipsum dolor sit amet, offendit volutpat sea ex, at
+								omnium scripta pro, at omnium scripta pro, ei mea oratio malorum
+								forensibus. ei mea oratio malorum forensibus. Sed ei omnes
+								laoreet posidonium ei mea oratio malorum forensibus.</p>
+							<h4>
+								<a href="#">Michael Feng</a>
+							</h4>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="item">
+						<div class="col-md-2 testmonial-img">
+							<img src="images/t2.png" class="img-responsive" alt="" />
+						</div>
+						<div class="col-md-10 testmonial-text">
+							<p>Lorem ipsum dolor sit amet, offendit volutpat sea ex, at
+								omnium scripta pro, at omnium scripta pro, ei mea oratio malorum
+								forensibus. ei mea oratio malorum forensibus. Sed ei omnes
+								laoreet posidonium ei mea oratio malorum forensibus.</p>
+							<h4>
+								<a href="#">Stacy Barron</a>
+							</h4>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="item">
+						<div class="col-md-2 testmonial-img">
+							<img src="images/t3.png" class="img-responsive" alt="" />
+						</div>
+						<div class="col-md-10 testmonial-text">
+							<p>Lorem ipsum dolor sit amet, offendit volutpat sea ex, at
+								omnium scripta pro, at omnium scripta pro, ei mea oratio malorum
+								forensibus. ei mea oratio malorum forensibus. Sed ei omnes
+								laoreet posidonium ei mea oratio malorum forensibus.</p>
+							<h4>
+								<a href="#">Johnson </a>
+							</h4>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!---testmonials--->
+	</div>
+	</div>
+	<!---footer--->
+	<div class="footer-section">
+		<div class="container">
+			<div class="footer-grids">
+				<div class="col-md-3 footer-grid">
+					<h4>About Real Homes</h4>
+					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+						sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna
+						aliquam erat volutpat.</p>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>Recent Posts</h4>
+					<ul>
+						<li><a href="#">Lorem Post With Image Format</a></li>
+						<li><a href="#">Example Video Blog Post</a></li>
+						<li><a href="#">Example Post With Gallery Post </a></li>
+						<li><a href="#">Example Video Blog Post</a></li>
+						<li><a href="#">Lorem Post With Image Format</a></li>
+						<li><a href="#">Example Video Blog Post</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>Useful links</h4>
+					<ul>
+						<li><a href="terms.html">Terms of Use</a></li>
+						<li><a href="privacy.html">Privacy Policy</a></li>
+						<li><a href="contact.html">Contact Support </a></li>
+						<li><a href="agents.html"> All Agents</a></li>
+						<li><a href="blog.html">Blog</a></li>
+						<li><a href="faqs.html">FAQs</a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 footer-grid">
+					<h4>Get In Touch</h4>
+					<p>8901 Marmora Road</p>
+					<p>Glasgow, DO4 89GR.</p>
+					<p>Freephone : +1 234 567 890</p>
+					<p>Telephone : +1 234 567 890</p>
+					<p>FAX : + 1 234 567 890</p>
+					<p>
+						E-mail : <a href="mailto:example@mail.com"> example@mail.com</a>
+					</p>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+
+		</div>
+	</div>
+	<!---footer--->
+	<!--copy-->
+	<div class="copy-section">
+		<div class="container">
+			<p>
+				Copyright &copy; 2016.Company name All rights reserved.More
+				Templates <a href="http://www.cssmoban.com/" target="_blank"
+					title="房地产">房地产</a> - Collect from <a href="" title="房地产"
+					target="_blank">房地产</a>
+			</p>
+		</div>
+	</div>
+	<!--copy-->
+	<!-- login -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content modal-info">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true" onblur="reset()">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body real-spa">
+					<div class="login-grids">
+						<div class="login">
+
+							<div class="login-right">
+								<form>
+									<h3>Login</h3>
+									<input type="text" value="Enter your Email"
+										onfocus="this.value = '';"
+										onblur="if (this.value == '') {this.value = 'Enter your Email';}"
+										required=""> <input type="password" value="Password"
+										onfocus="this.value = '';"
+										onblur="if (this.value == '') {this.value = 'Password';}"
+										required="">
+									<h4>
+										<a href="#">Forgot password</a> / <a href="#">Create new
+											password</a>
+									</h4>
+									<div class="single-bottom">
+										<input type="checkbox" id="brand" value=""> <label
+											for="brand"><span></span>Remember Me.</label>
+									</div>
+									<input type="submit" value="Login Now">
+								</form>
+							</div>
+
+						</div>
+						<p>
+							By logging in you agree to our <a href="#">Terms</a> and <a
+								href="#">Conditions</a> and <a href="#">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Register -->
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content modal-info">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body real-spa">
+					<div class="login-grids">
+						<div class="login">
+							<div class="login-right">
+
+
+								<form action="Register" method="post">
+									<h3>Register</h3>
+
+
+									<input type="text" onblur="NikenameFormat()" name="nikename"
+										id="nikename" placeholder="请输入用户名">
+									<div id="nikename_div"
+										style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+									<input type="text" onblur="PhoneFormat()" name="phone"
+										id="phone" placeholder="请输入电话号码">
+									<div id="phone_div"
+										style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+
+									<input type="password" onblur="PasswordFormat1()"
+										name="password1" id="password1" placeholder="请输入密码">
+									<div id="password_div1"
+										style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+									<input type="password" onblur="PasswordFormat2()"
+										name="password" id="password" placeholder="请再次输入密码">
+									<div id="password_div2"
+										style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+									<input type="text" onblur="IdCard()" name="idcard" id="idcard"
+										placeholder="请输入身份证号码">
+									<div id="idcard_div"
+										style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+									<input type="radio" name="gender" value="男" checked="checked" />男
+									<input type="radio" name="gender" value="女" />女
+									<div></div>
+
+
+									<input type="submit" value="立即注册">
+
+								</form>
+
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<p>
+							By logging in you agree to our <a href="#">Terms</a> and <a
+								href="#">Conditions</a> and <a href="#">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- login -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content modal-info">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body real-spa">
+					<div class="login-grids">
+						<div class="login">
+
+							<div class="login-right">
+
+								<h3>Login</h3>
+								<input type="text" onblur="LoginPhone()" name="loginphone"
+									id="loginphone" placeholder="请输入手机号码">
+
+								<div id="loginphone_div"
+									style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+
+
+								<input type="password" name="loginpassword" id="loginpassword"
+									placeholder="请输入密码">
+								<div id="loginpassword_div"
+									style="color: #F00; font-size: 12px; margin-left: 5%;"></div>
+
+
+								<h4>
+									<a href="#">Forgot password</a> / <a href="#">Create new
+										password</a>
+								</h4>
+								<div class="single-bottom">
+									<input type="checkbox" id="brand"> <label for="brand"><span></span>Remember
+										Me.</label>
+								</div>
+
+								<!-- onblur="login()" -->
+								<input type="submit" value="登录" id="longin">
+
+							</div>
+
+						</div>
+						<p>
+							By logging in you agree to our <a href="#">Terms</a> and <a
+								href="#">Conditions</a> and <a href="#">Privacy Policy</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //login -->
+	<!-- //Register -->
+</body>
+</html>

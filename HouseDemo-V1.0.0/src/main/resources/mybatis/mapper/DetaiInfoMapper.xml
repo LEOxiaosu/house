@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hoursecy.sy.dao.DetaiInfoMapper">
+	
+	<!-- 1.根据房屋id取出房屋详情信息 -->
+	<select id="findSellhouseById"	resultType="com.hoursecy.sy.pojo.ForSellPojo">
+		select * from sellhouse where houseid=#{houseid}
+	</select>
+	
+	<!-- 2.根据房屋id取出用户详情信息 -->
+	<select id="findUserById"	resultType="com.hoursecy.sy.pojo.UserPojo">
+		select * from usertable where id=(select id from sellhouse where houseid=#{houseid})
+	</select>
+	
+	<!-- 3.根据房屋id取出出租房屋的详情信息 -->
+	<select id="findRentHouseById" resultType="com.hoursecy.sy.pojo.ForRentPojo">
+		select * from renthouse where houseid=#{houseid}
+	</select>
+	
+	
+</mapper>
